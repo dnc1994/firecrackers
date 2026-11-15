@@ -8,7 +8,9 @@
 
 ## 玩
 
-直接用浏览器打开 `index.html`（需要联网，three.js 和 cannon-es 从 jsDelivr 加载）。
+线上：<https://mandihong.linghao.io>
+
+本地：直接用浏览器打开 `index.html`（需要联网，three.js 和 cannon-es 从 jsDelivr 加载）。
 
 手机：左下摇杆走路，右边滑动转头，底下一排换炮。
 
