@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>鞭炮沙盒 3D · 除夕的院子</title>
+<style>
+html,body{margin:0;height:100%;background:#1a1418;overflow:hidden;font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;color:#f3e6d0}
+#view{position:fixed;inset:0;touch-action:none;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#cross{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 3px #000;pointer-events:none;transition:transform .1s}
+#cross.on{background:#ffd27a;transform:scale(1.8)}
+#ctx{position:absolute;left:50%;top:calc(50% + 14px);transform:translateX(-50%);text-align:center;text-shadow:0 1px 3px #000,0 0 6px #000;pointer-events:none;white-space:nowrap}
+#ctxn{font-size:13px;opacity:.9}
+#ctxa{font-size:13.5px;margin-top:5px;color:#ffe9b8}
+#ctxa b{display:inline-block;min-width:20px;padding:1px 6px;margin-right:2px;border-radius:6px;background:rgba(255,246,224,.92);color:#5a1a12;text-shadow:none;font-size:12px}
+.ui{position:absolute;-webkit-tap-highlight-color:transparent;touch-action:none;cursor:pointer}
+.rb{border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff3dc;border:2px solid rgba(255,220,160,.55);background:rgba(30,20,24,.42);width:68px;height:68px;font-size:22px;line-height:1.05}
+.rb small{font-size:11px;margin-top:2px;white-space:nowrap}
+.rb.off{opacity:.35}
+.rb.hot{border-color:#ffd27a;background:rgba(232,163,58,.7);transform:scale(1.14);box-shadow:0 0 14px rgba(255,210,122,.7)}
+#btnA{right:14px;bottom:88px;width:96px;height:96px;background:rgba(200,40,46,.55);font-size:32px;border-color:rgba(255,220,160,.85)}
+#btnA small{font-size:12px}
+#btnA::after{content:'';position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(#ffe08a calc(var(--f,0)*360deg),transparent 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));pointer-events:none}
+#btnB{right:120px;bottom:78px}
+#btnC{right:28px;bottom:194px}
+#pocket{left:0;right:0;bottom:0;display:flex;gap:6px;padding:10px 8px 10px;overflow-x:auto;background:linear-gradient(transparent,rgba(0,0,0,.62));touch-action:pan-x;scrollbar-width:none}
+.chip{flex:0 0 auto;padding:7px 12px 7px 8px;border-radius:17px;background:rgba(30,20,24,.74);border:1px solid rgba(255,255,255,.18);font-size:14px;display:flex;align-items:center;gap:6px}
+.chip i{font-style:normal;font-size:11px;font-weight:700;min-width:17px;height:17px;line-height:17px;text-align:center;border-radius:5px;background:rgba(255,246,224,.9);color:#5a1a12}
+.chip.on{background:#c8282e;border-color:#ffd27a;color:#fff}
+#joy{left:22px;bottom:96px;width:112px;height:112px;border-radius:50%;border:2px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);pointer-events:none}
+#knob{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px;border-radius:50%;background:rgba(255,255,255,.28)}
+#top{left:8px;right:8px;top:8px;display:flex;gap:6px;align-items:center;pointer-events:none}
+.pill{pointer-events:auto;padding:7px 11px;border-radius:14px;background:rgba(20,12,16,.62);font-size:13px;border:1px solid rgba(255,255,255,.14)}
+#sp{flex:1}
+#legend{left:10px;bottom:58px;font-size:12px;color:#f3e6d0;opacity:.78;text-shadow:0 1px 3px #000;pointer-events:none;display:none;line-height:1.7}
+#legend b{padding:1px 5px;border-radius:5px;background:rgba(255,246,224,.85);color:#5a1a12;text-shadow:none;font-size:11px;margin-right:2px}
+#yell{position:absolute;left:50%;top:58px;transform:translateX(-50%);max-width:86%;background:#fff6e0;color:#7a1a14;font-weight:700;font-size:15px;padding:8px 13px;border-radius:12px;opacity:0;transition:opacity .25s;pointer-events:none;text-align:center}
+#toast{position:absolute;left:50%;top:136px;transform:translateX(-50%);font-size:14px;color:#ffe2a0;text-shadow:0 1px 4px #000,0 0 8px #000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.bub{position:absolute;display:none;transform:translate(-50%,-100%);background:#fff8e6;color:#3a2416;font-weight:700;font-size:14px;padding:6px 10px;border-radius:11px;pointer-events:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.35);max-width:80vw}
+.bub::after{content:'';position:absolute;left:50%;bottom:-6px;margin-left:-6px;border:6px solid transparent;border-top-color:#fff8e6;border-bottom:0}
+#white{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#splats{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.spl{position:absolute;border-radius:47% 53% 60% 40%/55% 45% 55% 45%;transition:opacity 3.5s 1.5s,transform 5s}
+#intro,#panel{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,6,12,.74);z-index:9}
+#panel{display:none}
+.card{max-width:460px;max-height:88%;overflow:auto;margin:14px;background:#22161a;border:1px solid #5a3a2a;border-radius:14px;padding:20px 22px}
+.card h1{margin:0 0 6px;font-size:24px;color:#ffcf7a;letter-spacing:2px}
+.card p{font-size:14px;line-height:1.75;margin:8px 0;color:#ead9bf}
+.card b{color:#ffb35c}
+.card kbd{font-family:inherit;padding:1px 6px;border-radius:5px;background:rgba(255,246,224,.9);color:#5a1a12;font-size:12px;font-weight:700}
+.go{display:block;width:100%;padding:12px;margin-top:12px;border:none;border-radius:10px;background:#c8282e;color:#fff3dc;font-size:16px;letter-spacing:4px;font-family:inherit}
+.go.sub{background:transparent;border:1px solid #5a3a2a;color:#b99c7c;font-size:13px;letter-spacing:1px;padding:8px}
+#list{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:13.5px;margin:10px 0}
+#list div{padding:5px 0;border-bottom:1px solid #3a2a2a}
+#list .no{color:#8d7a68}
+.key{display:none;position:absolute;top:-9px;right:-6px;background:#fff6e0;color:#7a1a14;font-size:11px;font-style:normal;font-weight:700;padding:2px 7px;border-radius:9px;white-space:nowrap}
+.desk{display:none}
+@media (hover:hover) and (pointer:fine){#joy{display:none}.key{display:block}#legend{display:block}.desk{display:block}.touch{display:none}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/","cannon-es":"https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"}}</script>
+</head>
+<body>
+<div id="view">
+  <div id="cross"></div><div id="ctx"><div id="ctxn"></div><div id="ctxa"></div></div>
+  <div id="white"></div><div id="splats"></div>
+  <div id="yell"></div><div id="toast"></div>
+  <div id="top" class="ui"><div class="pill" id="found">花样 0/0</div><div class="pill" id="cnt">0 响</div><div id="sp"></div><div class="pill" id="mute">🔊</div><div class="pill" id="help">？</div></div>
+  <div id="legend" class="ui"><b>WASD</b>走　<b>鼠标</b>转头　<b>滚轮</b>/<b>数字</b>换炮　<b>Esc</b>放开鼠标</div>
+  <div id="joy" class="ui"><div id="knob"></div></div>
+  <div id="btnC" class="ui rb"><span>✋</span><small>拿</small><i class="key">E</i></div>
+  <div id="btnB" class="ui rb"><span>👇</span><small>放</small><i class="key">Q / 右键</i></div>
+  <div id="btnA" class="ui rb"><span>🔥</span><small>点</small><i class="key">空格 / 左键</i></div>
+  <div id="pocket" class="ui"></div>
+  <div id="intro"><div class="card">
+    <h1>鞭炮沙盒</h1>
+    <p>年三十傍晚。大人在屋里打牌，爷爷在门口烤火打瞌睡，你兜里揣满了炮，手里捏着一根香。</p>
+    <p>院子里、村道上、田里看得见的东西，<b>都能拿来玩</b>。没有任务。表哥会怂恿你，妈妈会追出来。</p>
+    <p class="touch"><b>🔥</b> 点着手里的炮，再按一下扔出去（按住蓄力）；对着放好的炮就是点它。<br><b>👇</b> 把炮放在、插进、丢进你看着的东西。<br><b>✋</b> 端起盆、桶、砖、瓶子，再扣回去。<br>左下摇杆走路，右边滑动转头，底下一排换炮。</p>
+    <p class="desk"><kbd>WASD</kbd> 走　点一下画面后<kbd>鼠标</kbd>转头<br><kbd>空格</kbd>/<kbd>左键</kbd> 🔥 点、扔（按住蓄力）<br><kbd>Q</kbd>/<kbd>右键</kbd> 👇 放、插、丢<br><kbd>E</kbd> ✋ 拿、扣<br><kbd>滚轮</kbd> 或炮上标的<kbd>数字</kbd> 换炮　<kbd>Esc</kbd> 放开鼠标</p>
+    <p style="font-size:12.5px;color:#b99c7c">准星下面会一直写着现在能按什么。</p>
+    <button class="go" id="go" disabled style="opacity:.6">正在布置院子……</button>
+  </div></div>
+  <div id="panel"><div class="card"><h1>玩出的花样</h1><p style="font-size:12.5px;color:#b99c7c" id="psub"></p><div id="list"></div><button class="go" id="close">继 续</button><button class="go sub" id="reset">清空记录，从头再来</button></div></div>
+</div>
