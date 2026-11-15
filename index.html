@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>鞭炮沙盒 3D · 除夕的院子</title>
+<title>满地红 · 年三十，兜里揣满了炮</title>
 <style>
 html,body{margin:0;height:100%;background:#1a1418;overflow:hidden;font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;color:#f3e6d0}
 #view{position:fixed;inset:0;touch-action:none;overflow:hidden}
@@ -73,8 +73,9 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   <div id="btnA" class="ui rb"><span>🔥</span><small>点</small><i class="key">空格 / 左键</i></div>
   <div id="pocket" class="ui"></div>
   <div id="intro"><div class="card">
-    <h1>鞭炮沙盒</h1>
-    <p>年三十傍晚。大人在屋里打牌，爷爷在门口烤火打瞌睡，你兜里揣满了炮，手里捏着一根香。</p>
+    <h1>满地红</h1>
+    <p style="margin-top:0;color:#b99c7c;font-size:13px;letter-spacing:1px">年三十，兜里揣满了炮</p>
+    <p>傍晚。大人在屋里打牌，爷爷在门口烤火打瞌睡，你手里捏着一根香。</p>
     <p>院子里、村道上、田里看得见的东西，<b>都能拿来玩</b>。没有任务。表哥会怂恿你，妈妈会追出来。</p>
     <p class="touch"><b>🔥</b> 点着手里的炮，再按一下扔出去（按住蓄力）；对着放好的炮就是点它。<br><b>👇</b> 把炮放在、插进、丢进你看着的东西。<br><b>✋</b> 端起盆、桶、砖、瓶子，再扣回去。<br>左下摇杆走路，右边滑动转头，底下一排换炮。</p>
     <p class="desk"><kbd>WASD</kbd> 走　点一下画面后<kbd>鼠标</kbd>转头<br><kbd>空格</kbd>/<kbd>左键</kbd> 🔥 点、扔（按住蓄力）<br><kbd>Q</kbd>/<kbd>右键</kbd> 👇 放、插、丢<br><kbd>E</kbd> ✋ 拿、扣<br><kbd>滚轮</kbd> 或炮上标的<kbd>数字</kbd> 换炮　<kbd>Esc</kbd> 放开鼠标</p>
@@ -258,7 +259,7 @@ function yell(t,force){if(yellT>0&&!force)return;const e=$('#yell');e.textConten
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;toastT=2.6;}
 function whiteout(a){const e=$('#white');e.style.transition='none';e.style.opacity=a;requestAnimationFrame(()=>{e.style.transition='opacity 1.1s';e.style.opacity=0;});}
 function splat(n,col){const box=$('#splats');for(let i=0;i<n;i++){const d=document.createElement('div');d.className='spl';const s=rnd(40,150);d.style.cssText=`left:${rnd(-5,90)}%;top:${rnd(-5,85)}%;width:${s}px;height:${s*rnd(.7,1.2)}px;background:${col};opacity:.92;transform:rotate(${rnd(0,360)}deg)`;box.appendChild(d);requestAnimationFrame(()=>requestAnimationFrame(()=>{d.style.opacity=0;d.style.transform+=' translateY(60px)';}));setTimeout(()=>d.remove(),5600);}}
-const FOUND=[['cover','扣盆上天','盆除了洗脸还能干什么'],['dung','牛粪开花','田埂上那一坨，还冒着热气'],['water','水下闷雷','有一种炮不怕水'],['fish','炸鱼','塘里的鱼今晚睡不好'],['vat','水缸裂了',0],['bottle','瓶子炸碎','啤酒瓶的口，不大不小'],['rb','瓶口火箭','发射架'],['rh','手持窜天猴',0],['cabbage','白菜开花','那是包饺子用的'],['tree','柚子雨','树上还挂着几个没摘的'],['chicken','鸡飞','鸡'],['dog','狗跳','狗'],['jfgt','鸡飞狗跳',0],['cow','牛都吓拉了','村东头拴着一头'],['lid','井盖升天','路边有块圆铁板'],['bamboo','竹筒炮','爆竹为什么叫爆"竹"'],['crack','墙缝崩砖',0],['mud','烂泥开花','过年穿的新衣服'],['hay','草垛着了',0],['window','玻璃碎了',0],['quilt','被子烧了洞',0],['hand','在手里响了','再捏一会儿'],['ddh','满地红','一整挂'],['kick','踢罐子',0],
+const FOUND=[['cover','扣盆上天','盆除了洗脸还能干什么'],['dung','牛粪开花','田埂上那一坨，还冒着热气'],['water','水下闷雷','有一种炮不怕水'],['fish','炸鱼','塘里的鱼今晚睡不好'],['vat','水缸裂了',0],['bottle','瓶子炸碎','啤酒瓶的口，不大不小'],['rb','瓶口火箭','发射架'],['rh','手持窜天猴',0],['cabbage','白菜开花','那是包饺子用的'],['tree','柚子雨','树上还挂着几个没摘的'],['chicken','鸡飞','鸡'],['dog','狗跳','狗'],['jfgt','鸡飞狗跳',0],['cow','牛都吓拉了','村东头拴着一头'],['lid','井盖升天','路边有块圆铁板'],['bamboo','竹筒炮','爆竹为什么叫爆"竹"'],['crack','墙缝崩砖',0],['mud','烂泥开花','过年穿的新衣服'],['hay','草垛着了',0],['window','玻璃碎了',0],['quilt','被子烧了洞',0],['hand','在手里响了','再捏一会儿'],['ddh','噼里啪啦','一整挂'],['kick','踢罐子',0],
 ['etj','天上一响','地上一响，然后呢'],['etjh','手持二踢脚',0],['mst','魔术弹','一根管子，八颗星星'],['fount','火树银花','不响的也好看'],['bee','小蜜蜂','会飞的'],['spark','借个火','香不是唯一的火'],['ring','画个圈','拿着它转一圈'],['gift','给妹妹玩','她不敢放炮，但是……'],['cry','把妹妹弄哭了',0],['gp','吓醒爷爷','爷爷又在门口打瞌睡'],['brazier','火盆开花',0],['mom','妈妈冲出来了','闹大一点'],['ear','揪耳朵',0],['escape','逃出生天',0],['tiger','虎口拔牙',0],['tattle','被表哥告状',0],['dare','激将法','表哥说"敢不敢"的时候'],['czdung','表哥也有今天',0],
 ['moto','摩托车报警','二叔的车停在院里'],['meat','狗叼腊肉','屋檐下挂着年货'],['tray','辣椒满天飞','簸箕里晒着什么'],['logs','柴堆塌了','码得整整齐齐的'],['pumpkin','南瓜开花','台阶边的大个子'],['carton','纸箱炸烂','纸箱也是盆'],['coal','煤球开花',0],['scare','稻草人脱帽','菜地里站着个假人'],['coop','放鸡出笼','笼子里还关着一只'],['duck','赶鸭子','塘里游着几只'],['multi','一锅端','东西摆近一点'],['chain','连环炮','不用引线也能连起来'],['air','空中开花','别让它落地'],['dud','哑炮',0],['b100','一百响','多放点'],['b500','五百响',0]];
 const got=new Set();try{JSON.parse(localStorage.getItem('bp_found2')||'[]').forEach(k=>{if(FOUND.some(f=>f[0]===k))got.add(k);});}catch(e){}
